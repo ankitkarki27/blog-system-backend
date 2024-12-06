@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-# Create your models here.
+# Create your models for Blogging system here.
 
 #category
 class Category(models.Model):
@@ -38,5 +38,25 @@ class Comment(models.Model):
     def __str__(self):
         return f"Comment by {self.author} on {self.post}"
     
-    # class Like(models.Model):
+    
+
+class Like(models.Model):
+    post = models.ForeignKey(Post, related_name='likes', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('post', 'user')  # Ensures one like per user per post
+
+    def __str__(self):
+        return f"{self.user} liked {self.post.title}"
+    
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    bio = models.TextField(blank=True)
+    profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
+    
+    def __str__(self):
+        return f"{self.user.username}'s Profile"
+    
     
