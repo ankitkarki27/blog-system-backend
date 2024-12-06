@@ -1,14 +1,24 @@
 from django.db import models
 from django.contrib.auth.models import User
+# from users.models import User
 # Create your models for Blogging system here.
 
 #category
 class Category(models.Model):
-    name=models.CharField(max_length=100)
-    slug=models.SlugField(unique=True)
-    
+    CATEGORY_TYPES = [
+        ('tech', 'Technology'),
+        ('health', 'Health'),
+        ('sports', 'Sports'),
+        ('education', 'Education'),
+        ('news', 'News'),
+    ]
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(unique=True)
+    category_type = models.CharField(max_length=50, choices=CATEGORY_TYPES, default='tech')
+
     def __str__(self):
-        return self.name
+        return f"{self.name} ({self.get_category_type_display()})"
+
     
 class Post(models.Model):
     STATUS_CHOICES = [
